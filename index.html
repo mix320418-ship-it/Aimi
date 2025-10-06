@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>性欲望测试 · 16/64题完整版（移动/桌面自适应）</title>
+  <meta name="description" content="性欲望自测（16/64题），覆盖欲望频率、主动与幻想、心理情境、身体与生活方式四大维度与8个子维度，本地计算，移动/桌面自适应。"/>
+  <meta name="theme-color" content="#ffffff"/>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%236e56f4'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-size='28' fill='white' font-family='Arial'%3ELX%3C/text%3E%3C/svg%3E">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root{
+      --bg:#f7f7fb;--panel:#ffffff;--ink:#111827;--muted:#6b7280;--pri:#6e56f4;--ok:#10b981;--warn:#f59e0b;--danger:#ef4444;--line:#e5e7eb
+    }
+    html,body{height:100%}
+    body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif}
+    .wrap{max-width:960px;margin:0 auto}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:20px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:.75rem 1rem;border-radius:12px;border:1px solid var(--line);font-weight:600}
+    .btn-primary{background:var(--pri);color:#fff;border-color:transparent}
+    .btn-ghost{background:#fff;color:var(--ink)}
+    .badge{font-size:.75rem;padding:.25rem .5rem;border-radius:999px;border:1px solid var(--line);background:#fff}
+    .progress{height:10px;background:#eef0f7;border-radius:999px;overflow:hidden}
+    .progress>span{display:block;height:100%;background:var(--pri);width:0%}
+    .option{border:1px solid var(--line);border-radius:12px;padding:.75rem;cursor:pointer;transition:.15s}
+    .option:hover{border-color:var(--pri)}
+    .option input{display:none}
+    .option.active{border-color:var(--pri);box-shadow:0 0 0 3px rgba(110,86,244,.15)}
+    .dim-chip{font-size:.75rem;color:var(--muted)}
+    .footnote{font-size:.8rem;color:var(--muted)}
+    .modal-mask{position:fixed;inset:0;background:rgba(17,24,39,.5);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+    .hidden{display:none}
+    .tab{border-radius:12px;padding:.6rem 1rem;font-weight:700;border:1px solid var(--line);background:#fff;color:var(--ink);} .tab.is-active{background:var(--pri);color:#fff;border-color:transparent;} @media (min-width: 768px){
+      .qgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap p-4 md:p-8">
+    <header class="mb-4 md:mb-6 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-[var(--pri)]/10 border border-[var(--line)] flex items-center justify-center">
+          <span class="font-black text-[var(--pri)]">LX</span>
+        </div>
+        <div>
+          <h1 class="text-xl md:text-2xl font-bold">性欲望测试 · 完整版</h1>
+          <p class="text-sm text-[var(--muted)]">16/64题可切换 · 4大维度 + 8个子维度 · 移动/桌面自适应 · 本地计算</p>
+        </div>
+      </div>
+      <button id="toggleTheme" class="btn btn-ghost">浅/深色</button>
+    </header>
+
+    <div class="card p-4 md:p-6 mb-4 md:mb-6">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="badge" id="modeBadge">当前：16题</span>
+            <span class="dim-chip">64题包含更细子维度分析与建议</span>
+          </div>
+          <p class="text-sm text-[var(--muted)]">请根据近30天的真实体验作答；1分表示“几乎没有/极少”，5分表示“很频繁/非常”。</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn16" class="tab is-active">16题</button>
+          <button id="btn64" class="tab">64题</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card p-4 md:p-6 mb-4 md:mb-6">
+      <div class="flex items-center justify-between mb-2">
+        <div class="text-sm text-[var(--muted)]">进度</div>
+        <div class="text-sm"><span id="progressText">0</span>/<span id="totalText">16</span></div>
+      </div>
+      <div class="progress"><span id="progressBar"></span></div>
+    </div>
+
+    <div id="subdimHint" class="card p-4 md:p-6 mb-4 md:mb-6 hidden">
+      <div class="text-sm text-[var(--muted)]">
+        8 个子维度：DF-I 欲望强度、DF-T 诱发情境、IF-N 主动性、IF-E 新鲜感探索、PC-S 压力/情绪、PC-R 关系安全感、PL-S 睡眠与精力、PL-M 物质与疾病。
+      </div>
+    </div>
+
+    <form id="quizForm" class="card p-4 md:p-6 space-y-6">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg md:text-xl font-semibold">问卷</h2>
+        <span class="badge">必答</span>
+      </div>
+      <div id="questionList" class="space-y-4"></div>
+      <div class="flex items-center justify-between pt-2">
+        <div class="footnote">我们不收集个人身份信息；计算在你的浏览器本地完成。</div>
+        <button type="submit" class="btn btn-primary">提交并查看结果</button>
+      </div>
+    </form>
+
+    <section id="resultCard" class="card p-4 md:p-6 mt-6 hidden">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-lg md:text-xl font-semibold">你的测评结果</h2>
+        <div class="flex gap-2">
+          <button id="downloadBtn" class="btn btn-ghost">下载结果PNG</button>
+          <button id="resetBtn" class="btn btn-ghost">重新测一次</button>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="space-y-3">
+          <div class="text-4xl font-black" id="totalScore">—</div>
+          <div id="levelBadge" class="badge">—</div>
+          <p class="text-sm text-[var(--muted)]" id="levelDesc">—</p>
+
+          <div class="space-y-2">
+            <div class="flex items-center justify-between border border-[var(--line)] rounded-xl p-3">
+              <div><div class="font-semibold">欲望频率</div><div class="dim-chip">DF</div></div>
+              <div class="text-xl font-bold" id="score_DF">—</div>
+            </div>
+            <div class="flex items-center justify-between border border-[var(--line)] rounded-xl p-3">
+              <div><div class="font-semibold">主动与幻想</div><div class="dim-chip">IF</div></div>
+              <div class="text-xl font-bold" id="score_IF">—</div>
+            </div>
+            <div class="flex items-center justify-between border border-[var(--line)] rounded-xl p-3">
+              <div><div class="font-semibold">心理情境</div><div class="dim-chip">PC</div></div>
+              <div class="text-xl font-bold" id="score_PC">—</div>
+            </div>
+            <div class="flex items-center justify-between border border-[var(--line)] rounded-xl p-3">
+              <div><div class="font-semibold">身体与生活方式</div><div class="dim-chip">PL</div></div>
+              <div class="text-xl font-bold" id="score_PL">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <canvas id="chart" height="260"></canvas>
+          <div class="card p-3">
+            <div class="font-semibold mb-2">建议（根据你的表现）</div>
+            <ul class="list-disc ml-5 text-sm text-[var(--muted)] space-y-1" id="adviceList"></ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="subdimTableWrap" class="mt-6 hidden">
+        <div class="font-semibold mb-2">子维度得分（0-100）</div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border border-[var(--line)] rounded-xl overflow-hidden">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="text-left p-2 border-b border-[var(--line)]">维度</th>
+                <th class="text-left p-2 border-b border-[var(--line)]">子维度</th>
+                <th class="text-right p-2 border-b border-[var(--line)]">得分</th>
+              </tr>
+            </thead>
+            <tbody id="subdimTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="mt-4 footnote">
+        免责声明：本测试仅供成人进行自我了解，结果为一般性参考信息，不构成医学或心理诊断。如对自身身心健康有疑问，请咨询专业医生或心理咨询师。
+      </div>
+    </section>
+
+    <footer class="py-8 text-center footnote">
+      © 2025 Private Self-Assessment · 保密与隐私优先 · HTTPS 本地计算 · 自适应布局
+    </footer>
+  </div>
+
+  <div id="ageGate" class="modal-mask" role="dialog" aria-modal="true">
+    <div class="card p-6 max-w-lg w-full">
+      <h3 class="text-lg font-semibold mb-2">年龄确认与隐私说明</h3>
+      <p class="text-sm text-[var(--muted)] mb-4">
+        本测试包含成人主题，仅限 <b>18岁及以上</b> 用户使用。测算过程在你的浏览器本地完成，我们不收集个人身份信息。
+      </p>
+      <div class="flex items-center justify-end gap-2">
+        <button id="leaveBtn" class="btn btn-ghost">我未满18岁</button>
+        <button id="enterBtn" class="btn btn-primary">我已年满18岁，进入</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const toggleThemeBtn = document.getElementById('toggleTheme');
+    toggleThemeBtn.addEventListener('click', ()=>{
+      document.documentElement.classList.toggle('dark');
+      const dark = document.documentElement.classList.contains('dark');
+      document.body.style.background = dark ? '#0b1020' : 'var(--bg)';
+      document.body.style.color = dark ? '#e5e7eb' : 'var(--ink)';
+      document.querySelectorAll('.card').forEach(c=>{
+        c.style.background = dark ? 'rgba(255,255,255,.045)' : 'var(--panel)';
+        c.style.borderColor = dark ? 'rgba(255,255,255,.08)' : 'var(--line)';
+      });
+    });
+
+    const ageGate = document.getElementById('ageGate');
+    document.getElementById('enterBtn').onclick = ()=> ageGate.classList.add('hidden');
+    document.getElementById('leaveBtn').onclick = ()=>{
+      alert('很抱歉，未成年人不可使用本测试。');
+      location.href = 'about:blank';
+    };
+
+    const DIMS = { DF: '欲望频率', IF: '主动与幻想', PC: '心理情境', PL: '身体与生活方式' };
+    const SUBDIMS = {
+      'DF-I':'欲望强度','DF-T':'诱发情境',
+      'IF-N':'主动性','IF-E':'新鲜感探索',
+      'PC-S':'压力/情绪','PC-R':'关系安全感',
+      'PL-S':'睡眠与精力','PL-M':'物质与疾病'
+    };
+
+    const SCALE = [
+      {label:'1 分 · 几乎没有/极少', value:1},
+      {label:'2 分 · 偶尔/较少', value:2},
+      {label:'3 分 · 有时/一般', value:3},
+      {label:'4 分 · 经常/较多', value:4},
+      {label:'5 分 · 很频繁/非常', value:5},
+    ];
+
+    const QUESTIONS_16 = [
+      {id:1,  dim:'DF', text:'近30天，你感到性欲（想要亲密或性接触）的频率', type:1},
+      {id:2,  dim:'DF', text:'你出现性相关幻想或白日梦的频率', type:1},
+      {id:3,  dim:'DF', text:'看到或想到吸引你的人时，你的生理或心理唤起反应', type:1},
+      {id:4,  dim:'DF', text:'你对性的兴趣整体感受（主观意愿）', type:1},
+      {id:5,  dim:'IF', text:'当你有欲望时，你主动表达或发起亲密的意愿', type:1},
+      {id:6,  dim:'IF', text:'与伴侣或心仪对象相处时，你愿意通过沟通或暗示创造亲密机会', type:1},
+      {id:7,  dim:'IF', text:'你对探索新鲜感（场景、节奏、互动方式等）的开放程度', type:1},
+      {id:8,  dim:'IF', text:'当对方表达亲密意愿时，你的配合和回应意愿', type:1},
+      {id:9,  dim:'PC', text:'压力、焦虑或情绪低落对你的性欲影响', type:1, reverse:true},
+      {id:10, dim:'PC', text:'与伴侣/对象之间的信任、亲密和安全感', type:1},
+      {id:11, dim:'PC', text:'近期是否存在关系矛盾、沟通不畅等负面因素', type:1, reverse:true},
+      {id:12, dim:'PC', text:'你在亲密互动中的自我接纳与身体自信', type:1},
+      {id:13, dim:'PL', text:'睡眠质量（入睡、时长、醒后精神）', type:1},
+      {id:14, dim:'PL', text:'体力与精力（饮食、运动、日常疲劳等）', type:1},
+      {id:15, dim:'PL', text:'药物、酒精、尼古丁等对你欲望的影响', type:1, reverse:true},
+      {id:16, dim:'PL', text:'最近是否有生病、疼痛或明显不适影响欲望', type:1, reverse:true},
+    ];
+
+    const Q64 = {
+      'DF-I': [
+        '近30天，你自发出现强烈性冲动的频率',
+        '想到亲密接触时，你主观的渴望强度',
+        '仅仅与喜欢的人相处就会明显提升欲望',
+        '在没有外界刺激时，你也会自然产生性兴趣',
+        '你对性相关内容的吸引力敏感程度',
+        '听到暧昧话题会让你明显有欲望反应',
+        '一天之中有性欲高峰的时段（主观强烈感）',
+        '当被触碰或拥抱时的唤起强度'
+      ],
+      'DF-T': [
+        '压力较低的日子，你更容易产生欲望',
+        '外出/旅行/新环境更容易让你产生欲望',
+        '与伴侣的情感连结增强会提升你的欲望',
+        '对外表/气味/声线等感官线索的触发敏感度',
+        '浪漫或暧昧氛围能明显提升你的欲望',
+        '隐私与安全的环境会显著提升欲望',
+        '被肯定/被赞美后你更容易有欲望',
+        '运动或沐浴后更容易有欲望'
+      ],
+      'IF-N': [
+        '当你有欲望时，你会明确表达你的想法',
+        '你会主动营造亲密氛围（灯光、音乐、信息）',
+        '你会主动安排二人世界的时间',
+        '对方没有发出信号时，你也会尝试发起',
+        '你能以自然、不尴尬的方式开启亲密话题',
+        '当对方犹豫时，你会耐心沟通与引导',
+        '你愿意在尊重边界下尝试新的互动方式',
+        '你会根据对方反馈调整节奏与方式'
+      ],
+      'IF-E': [
+        '你愿意尝试新的节奏/地点/情景来增加新鲜感',
+        '你对道具或情调的接受程度',
+        '你会准备惊喜或小心机来提升期待感',
+        '你喜欢共同探索彼此的偏好与界限',
+        '你能提出并讨论自己的幻想/偏好',
+        '你对“慢热式互动”的耐心与兴趣',
+        '你会记录或总结彼此喜欢/不喜欢的要素',
+        '你愿意循序渐进地迭代亲密体验'
+      ],
+      'PC-S': [
+        '当你压力大时，你的欲望会显著下降（反向）',
+        '焦虑/情绪波动会让你对亲密退缩（反向）',
+        '你有有效的放松方式来缓解紧张',
+        '你能觉察并表达当下情绪状态',
+        '糟糕心情时你仍能接受轻柔的亲密连接',
+        '你对自我身体形象的满意程度',
+        '你会避免在情绪失衡时做冒进决定',
+        '你能在不佳情绪中找到重建亲密的路径'
+      ],
+      'PC-R': [
+        '你与伴侣的信任/安全感程度',
+        '对方的情感支持让你更愿意亲密',
+        '发生分歧后你们能较快修复连接',
+        '你觉得彼此尊重、聆听并能共识边界',
+        '你不会把亲密当作交换/施压的筹码',
+        '你能坦然说“不”和“我需要慢一点”',
+        '你们有约定的沟通暗号来表达需求与停下',
+        '你认为关系的稳定促进了你的欲望'
+      ],
+      'PL-S': [
+        '你的睡眠质量对欲望的正向影响',
+        '规律运动后，你更容易产生欲望',
+        '饮食均衡对你的精力有明显提升',
+        '你近期的疲劳感是否较少',
+        '你有固定的放松与恢复精力的习惯',
+        '白天精神充沛有助于晚间的亲密意愿',
+        '你有意识地管理工作与生活的界限',
+        '你能识别身体“想休息”与“可亲密”的信号'
+      ],
+      'PL-M': [
+        '药物副作用会降低你的欲望（反向）',
+        '酒精/尼古丁使用会影响你的状态（反向）',
+        '近期是否有疾病/疼痛影响亲密（反向）',
+        '久坐与缺乏运动会降低兴致（反向）',
+        '高糖/重油饮食让你感到更疲惫（反向）',
+        '深夜刷屏影响入睡与精力（反向）',
+        '咖啡因过量导致心悸/易怒（反向）',
+        '以上影响是否已被你识别并改善（正向）'
+      ]
+    };
+
+    function build64() {
+      const result = [];
+      let id = 1;
+      const sub2dim = {'DF-I':'DF','DF-T':'DF','IF-N':'IF','IF-E':'IF','PC-S':'PC','PC-R':'PC','PL-S':'PL','PL-M':'PL'};
+      Object.keys(Q64).forEach(sub=>{
+        Q64[sub].forEach((t,i)=>{
+          const reverse = t.includes('（反向）') || (sub==='PL-M' && i!==7);
+          result.push({ id: id++, dim: sub2dim[sub], sub: sub, text: t.replace('（反向）',''), type:1, reverse });
+        });
+      });
+      return result;
+    }
+    const QUESTIONS_64 = build64();
+
+    const qList = document.getElementById('questionList');
+    const totalText = document.getElementById('totalText');
+    const progressText = document.getElementById('progressText');
+    const progressBar = document.getElementById('progressBar');
+    const subdimHint = document.getElementById('subdimHint');
+    const modeBadge = document.getElementById('modeBadge');
+    let MODE = '16';
+
+    function renderQuestions(){
+      const data = MODE==='16' ? QUESTIONS_16 : QUESTIONS_64;
+      totalText.textContent = data.length;
+      qList.innerHTML = '';
+      data.forEach(q=>{
+        const wrap = document.createElement('div');
+        wrap.className = 'border border-[var(--line)] rounded-2xl p-3 md:p-4';
+        const subLabel = q.sub ? ` · <span class="dim-chip">${SUBDIMS[q.sub]}</span>` : '';
+        wrap.innerHTML = `
+          <div class="flex items-start justify-between gap-3">
+            <div class="font-medium">${q.id}. ${q.text}</div>
+            <span class="dim-chip">${DIMS[q.dim]}${subLabel}</span>
+          </div>
+          <div class="grid grid-cols-1 md:qgrid gap-2 mt-3" role="radiogroup" aria-label="${q.text}">
+            ${SCALE.map(s => `
+              <label class="option" data-q="${q.id}">
+                <input type="radio" name="q${q.id}" value="${s.value}" aria-label="${s.label}"/>
+                <div class="text-sm">${s.label}</div>
+              </label>
+            `).join('')}
+          </div>
+        `;
+        qList.appendChild(wrap);
+      });
+
+      document.querySelectorAll('.option').forEach(opt=>{
+        opt.addEventListener('click', ()=>{
+          const qId = opt.getAttribute('data-q');
+          document.querySelectorAll(`.option[data-q="${qId}"]`).forEach(o=>o.classList.remove('active'));
+          opt.classList.add('active');
+          const input = opt.querySelector('input'); input.checked = true;
+          updateProgress();
+        });
+      });
+      updateProgress();
+    }
+    renderQuestions();
+
+    function updateProgress(){
+      const data = MODE==='16' ? QUESTIONS_16 : QUESTIONS_64;
+      const answered = data.filter(q=>!!document.querySelector(`input[name="q${q.id}"]:checked`)).length;
+      progressText.textContent = answered;
+      progressBar.style.width = Math.round(answered / data.length * 100) + '%';
+    }
+
+    const btn16=document.getElementById('btn16');const btn64=document.getElementById('btn64');function setMode(m){if(m===MODE)return;MODE=m;modeBadge.textContent=`当前：${m}题`;if(MODE==='16'){btn16.classList.add('is-active');btn64.classList.remove('is-active');subdimHint.classList.add('hidden');}else{btn64.classList.add('is-active');btn16.classList.remove('is-active');subdimHint.classList.remove('hidden');}renderQuestions();document.getElementById('resultCard').classList.add('hidden');window.scrollTo({top:0,behavior:'smooth'});}btn16.addEventListener('click',()=>setMode('16'));btn64.addEventListener('click',()=>setMode('64'));/*patched*/document.getElementById('btn16').addEventListener('click', ()=>{
+      if(MODE==='16') return alert('已在 16 题模式');
+      MODE='16'; modeBadge.textContent='当前：16题'; subdimHint.classList.add('hidden');
+      renderQuestions(); document.getElementById('resultCard').classList.add('hidden'); window.scrollTo({top:0,behavior:'smooth'});
+    });
+    document.getElementById('btn64').addEventListener('click', ()=>{
+      if(MODE==='64') return alert('已在 64 题模式');
+      MODE='64'; modeBadge.textContent='当前：64题'; subdimHint.classList.remove('hidden');
+      renderQuestions(); document.getElementById('resultCard').classList.add('hidden'); window.scrollTo({top:0,behavior:'smooth'});
+    });
+
+    function avg100(arr){ const a = arr.reduce((s,v)=>s+v,0) / arr.length; return Math.round((a-1)/4*100); }
+    function bucketize(questions){
+      const dimBuckets = {DF:[],IF:[],PC:[],PL:[]};
+      const subBuckets = {}; Object.keys(SUBDIMS).forEach(k=> subBuckets[k]=[]);
+      questions.forEach(q=>{
+        let v = Number(document.querySelector(`input[name="q${q.id}"]:checked`).value);
+        if(q.reverse) v = 6 - v;
+        dimBuckets[q.dim].push(v);
+        if(q.sub) subBuckets[q.sub].push(v);
+      });
+      return {dimBuckets, subBuckets};
+    }
+
+    const form = document.getElementById('quizForm');
+    const resultCard = document.getElementById('resultCard');
+    const subdimTableWrap = document.getElementById('subdimTableWrap');
+    const subdimTable = document.getElementById('subdimTable');
+    let chart;
+
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const data = MODE==='16' ? QUESTIONS_16 : QUESTIONS_64;
+
+      const missing = []; data.forEach(q=>{ if(!document.querySelector(`input[name="q${q.id}"]:checked`)) missing.push(q.id); });
+      if(missing.length){ alert(`还有 ${missing.length} 题未作答：${missing.join(', ')}`); return; }
+
+      const {dimBuckets, subBuckets} = bucketize(data);
+      const scores = {
+        DF: avg100(dimBuckets.DF),
+        IF: avg100(dimBuckets.IF),
+        PC: avg100(dimBuckets.PC),
+        PL: avg100(dimBuckets.PL)
+      };
+      const total = Math.round((scores.DF+scores.IF+scores.PC+scores.PL)/4);
+
+      let level='', desc='';
+      if(total < 36){ level='较低'; desc='你当前总体性欲水平偏低，可能与压力、疲劳、睡眠、情绪或药物/身体不适等因素相关。建议先从作息与减压入手，逐步恢复身心活力。'; }
+      else if(total < 66){ level='中等'; desc='你的性欲处于常见范围，可能随情境和身心状态波动。可通过关系沟通、情绪支持与适度新鲜感来提升体验的品质。'; }
+      else { level='较高'; desc='你的性欲较为旺盛，通常伴随更高的主动性与幻想。建议在尊重与沟通的前提下平衡节奏，关注自我边界与对方感受。'; }
+
+      document.getElementById('totalScore').textContent = total;
+      const levelBadge = document.getElementById('levelBadge'); levelBadge.textContent = `总体：${level}`;
+      document.getElementById('levelDesc').textContent = desc;
+      document.getElementById('score_DF').textContent = scores.DF;
+      document.getElementById('score_IF').textContent = scores.IF;
+      document.getElementById('score_PC').textContent = scores.PC;
+      document.getElementById('score_PL').textContent = scores.PL;
+
+      const advice=[];
+      if(scores.PL < 50) advice.push('优先改善睡眠与作息，保持规律运动与均衡饮食，减少酒精与尼古丁摄入。');
+      if(scores.PC < 50) advice.push('关注情绪与压力管理，必要时寻求心理支持；与伴侣建立更稳定的安全感和信任。');
+      if(scores.IF < 50) advice.push('逐步练习表达愿望与界限，探索更舒适的互动节奏与沟通暗号。');
+      if(scores.DF < 50) advice.push('从轻量、低压力的亲密活动开始，给自己更多身心复原的时间。');
+      if(total >= 66) advice.push('保持尊重与沟通，兼顾自我节奏与对方感受，关注边界与同意原则。');
+
+      if(MODE==='64'){
+        const sds = {}; Object.keys(subBuckets).forEach(k=>{ if(subBuckets[k].length) sds[k]=avg100(subBuckets[k]); });
+        if((sds['PC-S']??100)<50) advice.push('当压力/情绪不稳时，安排“轻连接仪式”（拥抱/散步/按摩），先修复情绪，再谈亲密。');
+        if((sds['PC-R']??100)<50) advice.push('与伴侣共建“沟通暗号”与安全词，明确边界、节奏与OK/暂停信号。');
+        if((sds['PL-S']??100)<50) advice.push('固定睡眠时长与运动频率（如每周≥3次×30min），提升精力与唤起阈值。');
+        if((sds['PL-M']??100)<50) advice.push('与医生评估药物副作用；减少酒精/尼古丁；降低熬夜与高糖高油饮食。');
+        if((sds['IF-N']??100)<50) advice.push('用“我信息”表达：描述感受+需求+边界，先从轻度亲密开始逐步升级。');
+        if((sds['IF-E']??100)<50) advice.push('建立“共同清单”：记录彼此喜欢/不喜欢；每周尝试1个微创新，保持可控节奏。');
+        if((sds['DF-I']??100)<50) advice.push('在低压时段预留“二人时光”，利用自然高峰时段进行轻柔亲密互动。');
+        if((sds['DF-T']??100)<50) advice.push('为环境加分：收纳、香氛、音乐、柔光与私密性，提升诱发线索的质量。');
+      }
+      if(advice.length===0) advice.push('保持当前的身心习惯与沟通质量，关注周期性波动，必要时做阶段复测。');
+      document.getElementById('adviceList').innerHTML = advice.map(a=>`<li>${a}</li>`).join('');
+
+      const ctx = document.getElementById('chart'); if(window._radar) window._radar.destroy();
+      window._radar = new Chart(ctx, {
+        type:'radar',
+        data:{ labels:['欲望频率(DF)','主动与幻想(IF)','心理情境(PC)','身体与生活方式(PL)'], datasets:[{label:'维度得分（0-100）',data:[scores.DF,scores.IF,scores.PC,scores.PL],fill:true}] },
+        options:{responsive:true,plugins:{legend:{display:false}},scales:{r:{suggestedMin:0,suggestedMax:100,ticks:{stepSize:20}}}}
+      });
+
+      if(MODE==='64'){
+        subdimTableWrap.classList.remove('hidden');
+        const sds = {}; Object.keys(subBuckets).forEach(k=>{ if(subBuckets[k].length) sds[k]=avg100(subBuckets[k]); });
+        subdimTable.innerHTML = Object.keys(sds).map(k=>{
+          const dim = k.split('-')[0];
+          return `<tr><td class="p-2 border-t border-[var(--line)]">${DIMS[dim]}</td><td class="p-2 border-t border-[var(--line)]">${SUBDIMS[k]}</td><td class="p-2 border-t border-[var(--line)] text-right font-semibold">${sds[k]}</td></tr>`;
+        }).join('');
+      } else {
+        subdimTableWrap.classList.add('hidden'); subdimTable.innerHTML='';
+      }
+
+      resultCard.classList.remove('hidden');
+      resultCard.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', ()=>{
+      document.querySelectorAll('input[type="radio"]').forEach(i=>i.checked=false);
+      document.querySelectorAll('.option').forEach(o=>o.classList.remove('active'));
+      updateProgress(); document.getElementById('resultCard').classList.add('hidden');
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+
+    document.getElementById('downloadBtn').addEventListener('click', ()=>{
+      const canvas = document.getElementById('chart');
+      const link = document.createElement('a');
+      link.download = `性欲望测试_${Date.now()}.png`; link.href = canvas.toDataURL('image/png'); link.click();
+    });
+
+    const qListEl = document.getElementById('questionList');
+    qListEl.addEventListener('change', updateProgress);
+    function init(){ updateProgress(); }
+    init();
+  </script>
+</body>
+</html>
